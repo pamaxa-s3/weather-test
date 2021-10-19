@@ -22,11 +22,30 @@ class App extends Component {
   componentDidMount() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        const response = `http://api.openweathermap.org/data/2.5/weatherlat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${API_KEY}&units=metric`;
+        const responseFirst = `https://www.metaweather.com/api/location/search/?lattlong=${position.coords.latitude},${position.coords.longitude}`;
 
-        fetch(response)
+        // для этого запроса нужно купить соответствующий тарифный план
+        // const response = `http://api.openweathermap.org/data/2.5/weatherlat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${API_KEY}&units=metric`;
+
+        fetch(responseFirst)
           .then(res => res.json())
-          .then(result => console.log(result))
+          .then(result => (fetch(`http://api.openweathermap.org/data/2.5/weather?q=${result[0].title}&appid=${API_KEY}&units=metric`)))
+          .then(response => response.json())
+          .then(data => {
+            if (data.cod === 200) {
+              this.setState({
+                lon: data.coord.lon,
+                lat: data.coord.lat,
+                temp: data.main.temp,
+                city: data.name,
+                icon: data.weather[0].icon,
+                error: ''
+              })
+            }
+            this.setState({
+              error: data.message
+            })
+          })
       });
     }
   }
@@ -71,7 +90,7 @@ class App extends Component {
 
     // Красим фон
     const divStyle = {
-      'background': '#444'
+      'background': null
     }
 
     if (this.state.temp < (-10)) {
