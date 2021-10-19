@@ -5,5 +5,5 @@
 .WeatherForm input, .WeatherForm button {
    border-radius: 4px;
    margin-right: 10px;
-   height: 35px;
+   min-height: 35px;
 }
