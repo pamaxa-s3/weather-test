@@ -3,6 +3,7 @@ import WeatherForm from './components/WeatherForm/WeatherForm';
 import WeatherInfo from './components/WeatherInfo/WeatherInfo';
 import { API_KEY } from './helper/API_KEY';
 import './App.css'
+import RangeBackground from './components/RangeBacground/RangeBackground';
 
 // let api = "http://api.openweathermap.org/data/2.5/weather?"
 
@@ -100,6 +101,7 @@ class App extends Component {
         <WeatherInfo
           {...this.state}
         />
+        <RangeBackground />
       </div >
     );
   }
